@@ -1,1 +1,144 @@
+if not game:IsLoaded() then
+    game.IsLoaded:Wait()
+end
 
+local kron = {}
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
+local player = game:GetService("Players").LocalPlayer
+local cframeplayer = player.Character.HumanoidRootPart
+
+local HttpService = game:GetService("HttpService")
+local DataToSet = {}
+
+local configsuccess, result = pcall(function()
+    if readfile then
+        DataToSet = HttpService:JSONDecode(readfile("Kron.lua"))
+    end
+end)
+
+function kron:callServer(remote, ...) 
+    local remote = (typeof(remote) == "string" and replicatedStorage:FindFirstChild(remote, true)) or remote
+    
+    if remote:IsA("RemoteEvent") then
+        remote:FireServer(...)
+    elseif remote:IsA("BindableEvent") then
+        remote:Fire(...)
+    end
+end
+
+function kron:GetTreeSizeByY(tree)
+    local totalY = 0
+    for _, part in pairs(tree:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name == "WoodSection" then
+            totalY = totalY + part.Size.Y
+        end
+    end
+    return totalY
+end
+
+function kron:TreeFind(treeType)
+    local Trees = nil
+    local TreeModel = nil
+
+    for _, region in pairs(workspace:GetDescendants()) do
+        if region:FindFirstChild("TreeClass") and region:FindFirstChild("TreeClass").Value == treeType and region:FindFirstChild("Owner") and region:FindFirstChild("Owner").Value == nil then
+            if region.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "PlayerModels" and region.Parent.Name ~= "LogModels" then
+                cframeplayer:PivotTo(region.WoodSection.CFrame)
+                Trees = region
+                TreeModel = region.Owner.Parent
+                break
+            end
+        end
+    end
+    return Trees, TreeModel
+end
+
+function kron:reJoin()
+    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/Limeu1u/lime/refs/heads/main/lems"))()')
+    loadstring(game:HttpGet('https://pastebin.com/raw/SiNA6Txf'))("")
+end
+
+local embedColor = 0xffffff
+local embedtxt = ""
+
+if DataToSet.TreeType == "Spooky" then
+    embedColor = 0xb46100
+    embedtxt = "🎃 Spooky Found, Size: "
+elseif DataToSet.TreeType == "SpookyNeon" then
+    embedColor = 0xe46a1b
+    embedtxt = "👻 SpookyNeon Found, Size: "
+elseif DataToSet.TreeType == "LoneCave" then
+    embedColor = 0xffffff
+    embedtxt = "⚪ LoneCave Found, Size: "
+elseif DataToSet.TreeType == "BlueSpruce" then
+    embedColor = 0x4498d3
+    embedtxt = "❄️ BlueSpruce Found, Size:"
+end
+
+function kron:webHook()
+    for _, region in ipairs(game.Workspace:GetChildren()) do
+        if region.Name == "TreeRegion" then
+            for _, model in ipairs(region:GetChildren()) do
+                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
+                    local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
+                        {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
+                            ["type"] = "rich", ["footer"] = {["text"] = os.date("%c", os.time())},
+                            fields = {
+                                {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
+                                {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
+                                {name = "**Server URL**", value = "```lua\n" .. "roblox://game.PlaceId=13822889&gameInstanceId=" .. game.JobId.. "&joinAttemptOrigin=ServerListJoin/```", inline = false}
+                            }
+                        }
+                    }
+                }
+                (request or http_request or HttpPost or syn.request)({Url = DataToSet.Webhook, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {["Content-Type"] = "application/json"}})
+                end
+            end
+        end
+    end
+end
+
+function kron:TreeTP()
+    local Tree, TreeModel = kron:TreeFind(DataToSet.TreeType)
+
+    if Tree then
+        local TreeSize = kron:GetTreeSizeByY(TreeModel)
+
+        kron:callServer("SendUserNotice", 'KronHub: Tree Found')
+        task.wait(5)
+        
+        task.delay(5, function()
+            kron:callServer("ClientIsDragging", Tree)
+        end)
+
+        if DataToSet.Send then
+            kron:webHook()
+        end
+
+        if DataToSet.LoadKron then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/version_1.0'))("")
+        end
+
+        if DataToSet.TreeSize == "Medium" then
+            if TreeSize < 5 then
+                kron:reJoin()
+            end
+        elseif DataToSet.TreeSize == "Large" then
+            if TreeSize < 10 then
+                kron:reJoin()
+            end
+        end
+
+        if not DataToSet.StopHop then
+            task.wait(5)
+            kron:reJoin()
+        end
+    else
+        kron:callServer("SendUserNotice", 'KronHub: Rejoining')
+        kron:reJoin()
+    end
+    return Tree
+end
+
+kron:TreeTP()
