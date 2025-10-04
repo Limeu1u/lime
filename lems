@@ -1,7 +1,3 @@
-if not game:IsLoaded() then
-    game.IsLoaded:Wait()
-end
-
 local kron = {}
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local workspace = game:GetService("Workspace")
@@ -55,7 +51,7 @@ function kron:TreeFind(treeType)
 end
 
 function kron:reJoin()
-    queueonteleport('repeat wait() until game:IsLoaded() task.wait(5) loadstring(game:HttpGet("https://raw.githubusercontent.com/Limeu1u/lime/refs/heads/main/lems"))()')
+    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/Limeu1u/lime/refs/heads/main/lems"))()')
     loadstring(game:HttpGet('https://pastebin.com/raw/SiNA6Txf'))("")
 end
 
@@ -131,7 +127,7 @@ function kron:TreeTP()
         end
 
         if not DataToSet.StopHop then
-            task.wait(5)
+            task.wait(1)
             kron:reJoin()
         end
     else
