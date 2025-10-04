@@ -40,7 +40,7 @@ function kron:TreeFind(treeType)
     for _, region in pairs(workspace:GetDescendants()) do
         if region:FindFirstChild("TreeClass") and region:FindFirstChild("TreeClass").Value == treeType and region:FindFirstChild("Owner") and region:FindFirstChild("Owner").Value == nil then
             if region.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "PlayerModels" and region.Parent.Name ~= "LogModels" then
-                --cframeplayer:PivotTo(region.WoodSection.CFrame)
+               -- cframeplayer:PivotTo(region.WoodSection.CFrame)
                 Trees = region
                 TreeModel = region.Owner.Parent
                 break
@@ -51,7 +51,7 @@ function kron:TreeFind(treeType)
 end
 
 function kron:reJoin()
-    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/finder"))()')
+    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/Limeu1u/lime/refs/heads/main/lems"))()')
     loadstring(game:HttpGet('https://pastebin.com/raw/SiNA6Txf'))("")
 end
 
