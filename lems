@@ -40,7 +40,7 @@ function kron:TreeFind(treeType)
     for _, region in pairs(workspace:GetDescendants()) do
         if region:FindFirstChild("TreeClass") and region:FindFirstChild("TreeClass").Value == treeType and region:FindFirstChild("Owner") and region:FindFirstChild("Owner").Value == nil then
             if region.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "PlayerModels" and region.Parent.Name ~= "LogModels" then
-                cframeplayer:PivotTo(region.WoodSection.CFrame)
+               -- cframeplayer:PivotTo(region.WoodSection.CFrame)
                 Trees = region
                 TreeModel = region.Owner.Parent
                 break
@@ -83,7 +83,7 @@ function kron:webHook()
                             fields = {
                                 {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
                                 {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
-                                {name = "**Server URL**", value = "```lua\n" .. "roblox://game.PlaceId=13822889&gameInstanceId=" .. game.JobId.. "&joinAttemptOrigin=ServerListJoin/```", inline = false}
+                                {name = "**Server URL**", value = "```lua\n" .. "roblox://placeID=13822889&gameInstanceId=" .. game.JobId"```", inline = false}
                             }
                         }
                     }
@@ -127,7 +127,7 @@ function kron:TreeTP()
         end
 
         if not DataToSet.StopHop then
-            task.wait(1)
+            task.wait(5)
             kron:reJoin()
         end
     else
