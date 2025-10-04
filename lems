@@ -60,13 +60,13 @@ local embedtxt = ""
 
 if DataToSet.TreeType == "Spooky" then
     embedColor = 0xb46100
-    embedtxt = "🎃 Spooky Found, Size: "
+    embedtxt = "We found Spooky, Size: "
 elseif DataToSet.TreeType == "SpookyNeon" then
     embedColor = 0xe46a1b
-    embedtxt = "👻 SpookyNeon Found, Size: "
+    embedtxt = "We found SpookyNeon, Size: "
 elseif DataToSet.TreeType == "LoneCave" then
     embedColor = 0xffffff
-    embedtxt = "⚪ LoneCave Found, Size: "
+    embedtxt = "We found LoneCave, Size: "
 elseif DataToSet.TreeType == "BlueSpruce" then
     embedColor = 0x4498d3
     embedtxt = "❄️ BlueSpruce Found, Size:"
