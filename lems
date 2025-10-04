@@ -40,7 +40,7 @@ function kron:TreeFind(treeType)
     for _, region in pairs(workspace:GetDescendants()) do
         if region:FindFirstChild("TreeClass") and region:FindFirstChild("TreeClass").Value == treeType and region:FindFirstChild("Owner") and region:FindFirstChild("Owner").Value == nil then
             if region.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "PlayerModels" and region.Parent.Name ~= "LogModels" then
-               -- cframeplayer:PivotTo(region.WoodSection.CFrame)
+                --cframeplayer:PivotTo(region.WoodSection.CFrame)
                 Trees = region
                 TreeModel = region.Owner.Parent
                 break
@@ -51,7 +51,7 @@ function kron:TreeFind(treeType)
 end
 
 function kron:reJoin()
-    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/Limeu1u/lime/refs/heads/main/lems"))()')
+    queueonteleport('repeat wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/finder"))()')
     loadstring(game:HttpGet('https://pastebin.com/raw/SiNA6Txf'))("")
 end
 
@@ -77,7 +77,7 @@ function kron:webHook()
         if region.Name == "TreeRegion" then
             for _, model in ipairs(region:GetChildren()) do
                 if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
-                    local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
+                    local data = {["content"] = "<@&1424135409197387898>", ["username"] = "KronHub", ["embeds"] = {
                         {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
                             ["type"] = "rich", ["footer"] = {["text"] = os.date("%c", os.time())},
                             fields = {
