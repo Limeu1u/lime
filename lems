@@ -87,7 +87,7 @@ function kron:webHook()
                             fields = {
                                 {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
                                 {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
-                                {name = "**Server URL**", value = "```lua\n" .. "roblox://placeID=13822889&gameInstanceId=" .. game.JobId .. "```", inline = false}
+                                {name = "**Server URL**", value = "```lua\n" .. "https://www.rhinodashboard.com/finder/" .. game.JobId .. "```", inline = false}
                             }
                         }
                     }
