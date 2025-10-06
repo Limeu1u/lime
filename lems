@@ -30,7 +30,7 @@ function kron:GetTreeSizeByY(tree)
             totalY = totalY + part.Size.Y
         end
     end
-    return totalY
+    return math.floor(totalY)
 end
 
 function kron:TreeFind(treeType)
@@ -40,7 +40,11 @@ function kron:TreeFind(treeType)
     for _, region in pairs(workspace:GetDescendants()) do
         if region:FindFirstChild("TreeClass") and region:FindFirstChild("TreeClass").Value == treeType and region:FindFirstChild("Owner") and region:FindFirstChild("Owner").Value == nil then
             if region.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "Loose_" ..treeType and region.Parent.Name ~= "PlayerModels" and region.Parent.Name ~= "LogModels" then
-               -- cframeplayer:PivotTo(region.WoodSection.CFrame)
+
+                if DataToSet.ToWood then
+                    cframeplayer:PivotTo(region.WoodSection.CFrame)
+                end
+
                 Trees = region
                 TreeModel = region.Owner.Parent
                 break
@@ -79,7 +83,7 @@ function kron:webHook()
                 if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
                     local data = {["content"] = "<@&1424135409197387898>", ["username"] = "KronHub", ["embeds"] = {
                         {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
-                            ["type"] = "rich", ["footer"] = {["text"] = os.date("%c", os.time())},
+                            ["type"] = "rich", ["footer"] = {["text"] = ""},
                             fields = {
                                 {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
                                 {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
@@ -96,6 +100,29 @@ function kron:webHook()
 end
 
 function kron:TreeTP()
+    local TreeNeon, TreeModelNeon
+
+    if DataToSet.FindNeon then
+        TreeNeon, TreeModelNeon = kron:TreeFind("SpookyNeon")
+
+        if TreeNeon then
+            kron:callServer("SendUserNotice", 'KronHub: Tree Found')
+            task.wait(5)
+
+            task.delay(5, function()
+                kron:callServer("ClientIsDragging", Tree)
+            end)
+            
+            if DataToSet.Send then
+                kron:webHook()
+            end
+
+            if DataToSet.LoadKron then
+                loadstring(game:HttpGet('https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/version_1.0'))("")
+            end
+        end
+    end
+
     local Tree, TreeModel = kron:TreeFind(DataToSet.TreeType)
 
     if Tree then
@@ -123,6 +150,12 @@ function kron:TreeTP()
         elseif DataToSet.TreeSize == "Large" then
             if TreeSize < 10 then
                 kron:reJoin()
+            end
+        end
+
+        if TreeNeon then
+            if DataToSet.StopHop then
+                return
             end
         end
 
