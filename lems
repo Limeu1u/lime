@@ -81,7 +81,7 @@ function kron:webHook()
         if region.Name == "TreeRegion" then
             for _, model in ipairs(region:GetChildren()) do
                 if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
-                    local data = {["content"] = "<@&1424135409197387898>", ["username"] = "KronHub", ["embeds"] = {
+                    local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
                         {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
                             ["type"] = "rich", ["footer"] = {["text"] = ""},
                             fields = {
@@ -99,7 +99,35 @@ function kron:webHook()
     end
 end
 
+function kron:SecondwebHook()
+    for _, region in ipairs(game.Workspace:GetChildren()) do
+        if region.Name == "TreeRegion" then
+            for _, model in ipairs(region:GetChildren()) do
+                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
+                    local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
+                        {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
+                            ["type"] = "rich", ["footer"] = {["text"] = ""},
+                            fields = {
+                                {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
+                                {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
+                                {name = "**Server URL**", value = "https://www.rhinodashboard.com/finder/" .. game.JobId, inline = false}
+                            }
+                        }
+                    }
+                }
+                (request or http_request or HttpPost or syn.request)({Url = "https://discordapp.com/api/webhooks/1424476814348386504/4voZmTFOoQ3vIbxX2ITj_p7FQJgkR0DuG0QglozLF_ZeDbGjJZNDFJDdpGbP-upJQlkK", Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = {["Content-Type"] = "application/json"}})
+                end
+            end
+        end
+    end
+end
+
 function kron:TreeTP()
+    if DataToSet.Safemode then
+        game:GetService("ReplicatedStorage").LoadSaveRequests.RequestLoad:InvokeServer(1, game.Players.LocalPlayer)
+        task.wait(15)
+    end
+
     local TreeNeon, TreeModelNeon
 
     if DataToSet.FindNeon then
@@ -110,7 +138,7 @@ function kron:TreeTP()
             task.wait(5)
 
             task.delay(5, function()
-                kron:callServer("ClientIsDragging", Tree)
+                kron:callServer("ClientIsDragging", TreeNeon)
             end)
             
             if DataToSet.Send then
