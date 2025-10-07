@@ -62,31 +62,17 @@ end
 local embedColor = 0xffffff
 local embedtxt = ""
 
-if DataToSet.TreeType == "Spooky" then
-    embedColor = 0xb46100
-    embedtxt = "We found Spooky, Size: "
-elseif DataToSet.TreeType == "SpookyNeon" then
-    embedColor = 0xe46a1b
-    embedtxt = "We found SpookyNeon, Size: "
-elseif DataToSet.TreeType == "LoneCave" then
-    embedColor = 0xffffff
-    embedtxt = "We found LoneCave, Size: "
-elseif DataToSet.TreeType == "BlueSpruce" then
-    embedColor = 0x4498d3
-    embedtxt = "❄️ BlueSpruce Found, Size:"
-end
-
-function kron:webHook()
+function kron:webHook(TreeType)
     for _, region in ipairs(game.Workspace:GetChildren()) do
         if region.Name == "TreeRegion" then
             for _, model in ipairs(region:GetChildren()) do
-                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
+                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == TreeType and model:FindFirstChild("WoodSection") then
                     local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
                         {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
                             ["type"] = "rich", ["footer"] = {["text"] = ""},
                             fields = {
                                 {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
-                                {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
+                                {name = "**Player To **" .. TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
                                 {name = "**Server URL**", value = "https://www.rhinodashboard.com/finder/" .. game.JobId, inline = false}
                             }
                         }
@@ -99,17 +85,17 @@ function kron:webHook()
     end
 end
 
-function kron:SecondwebHook()
+function kron:SecondwebHook(TreeType)
     for _, region in ipairs(game.Workspace:GetChildren()) do
         if region.Name == "TreeRegion" then
             for _, model in ipairs(region:GetChildren()) do
-                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == DataToSet.TreeType and model:FindFirstChild("WoodSection") then
+                if model:FindFirstChild("TreeClass") and model.TreeClass.Value == TreeType and model:FindFirstChild("WoodSection") then
                     local data = {["content"] = "", ["username"] = "KronHub", ["embeds"] = {
                         {["title"] = embedtxt .. "" .. kron:GetTreeSizeByY(model), ["description"] = "", color = embedColor,
                             ["type"] = "rich", ["footer"] = {["text"] = ""},
                             fields = {
                                 {name = "**Teleport PlaceID**", value = "```lua\n".. 'game:GetService("TeleportService")'..":TeleportToPlaceInstance".."("..game.PlaceId..",".. "'" .. game.JobId.. "'".. ",".."game.Players.LocalPlayer"..")```", inline = true},
-                                {name = "**Player To **" .. DataToSet.TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
+                                {name = "**Player To **" .. TreeType, value = "```lua\n" .. "game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. tostring(model.WoodSection.CFrame) .. ")" .. "```", inline = false},
                                 {name = "**Server URL**", value = "https://www.rhinodashboard.com/finder/" .. game.JobId, inline = false}
                             }
                         }
@@ -135,21 +121,39 @@ function kron:TreeTP()
 
         if TreeNeon then
             kron:callServer("SendUserNotice", 'KronHub: Tree Found')
+
+            embedColor = 0xe46a1b
+            embedtxt = "We found SpookyNeon, Size: "
+
             task.wait(5)
 
             task.delay(5, function()
-                kron:callServer("ClientIsDragging", TreeNeon)
+                kron:callServer("ClientIsDragging", TreeNeon) 
             end)
             
             if DataToSet.Send then
-                kron:webHook()
-                kron:SecondwebHook()
+                kron:webHook("SpookyNeon")
+                kron:SecondwebHook("SpookyNeon")
             end
 
             if DataToSet.LoadKron then
                 loadstring(game:HttpGet('https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/version_1.0'))("")
             end
         end
+    end
+
+    if DataToSet.TreeType == "Spooky" then
+        embedColor = 0xb46100
+        embedtxt = "We found Spooky, Size: "
+    elseif DataToSet.TreeType == "SpookyNeon" then
+        embedColor = 0xe46a1b
+        embedtxt = "We found SpookyNeon, Size: "
+    elseif DataToSet.TreeType == "LoneCave" then
+        embedColor = 0xffffff
+        embedtxt = "We found LoneCave, Size: "
+    elseif DataToSet.TreeType == "BlueSpruce" then
+        embedColor = 0x4498d3
+        embedtxt = "❄️ BlueSpruce Found, Size:"
     end
 
     local Tree, TreeModel = kron:TreeFind(DataToSet.TreeType)
@@ -165,8 +169,8 @@ function kron:TreeTP()
         end)
 
         if DataToSet.Send then
-            kron:webHook()
-            kron:SecondwebHook()
+            kron:webHook(DataToSet.TreeType)
+            kron:SecondwebHook(DataToSet.TreeType)
         end
 
         if DataToSet.LoadKron then
